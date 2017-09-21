@@ -110,9 +110,13 @@ def main(args):
 
     weights = dd.io.load(args.restore_from)
     print('Loaded weights from {}'.format(args.restore_from))
+    # give the various layers in a dictionary form
     weights = create_variables(weights, cuda=True)
+    # get the custom model made in another file
     forward = lambda input: modelpy.DeepLabResNetModel({'data': input}, weights).layers['fc1_voc12']
+    # custom dataset defined in another file
     train, val, test = load_extended_voc()
+    # map will give an iterable object in python 3
     input_size = map(int, args.input_size.split(',')) if args.input_size is not None else None
     print ('========')
 
